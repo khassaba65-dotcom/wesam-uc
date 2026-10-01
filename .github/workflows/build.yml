@@ -1,0 +1,21 @@
+name: Build Wesam UC APK
+on: [push, workflow_dispatch]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+      - name: Build Debug APK
+        run: |
+          gradle wrapper
+          ./gradlew assembleDebug
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wesam-uc-apk
+          path: app/build/outputs/apk/debug/*.apk
